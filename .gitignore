@@ -103,6 +103,7 @@ celerybeat.pid
 
 # Environments
 .env
+.envs/
 .venv
 env/
 venv/
@@ -143,3 +144,6 @@ dmypy.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Volumes
+dockervolume/

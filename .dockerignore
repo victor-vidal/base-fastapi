@@ -1,0 +1,10 @@
+# Ignore everything, to use this ignore as a whitelist
+*
+
+# List allowed files/folders here, preceded by an ! mark
+!requirements/
+!app/
+!docker/
+!migrations/
+!alembic.ini
+dockervolume/
