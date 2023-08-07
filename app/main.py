@@ -6,7 +6,7 @@ from app.analytics.core.container import AnalyticsContainer
 
 from app.settings.config import configs
 from app.shared.util.class_object import singleton
-
+from app.shared.idp import FastAPIKeycloak
 
 @singleton
 class AppCreator:
@@ -17,6 +17,14 @@ class AppCreator:
             openapi_url=f"{configs.API}/openapi.json",
             version="0.0.1",
         )
+        # self.idp = FastAPIKeycloak(
+        #     server_url="https://auth.some-domain.com/auth",
+        #     client_id="some-client",
+        #     client_secret="some-client-secret",
+        #     admin_client_secret="admin-cli-secret",
+        #     realm="some-realm-name",
+        #     callback_uri="http://localhost:8081/callback"
+        # )
 
         # set db and container
         self.analytics_container = AnalyticsContainer()
