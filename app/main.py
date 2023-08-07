@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from app.api.v1.routes import routers as v1_routers
-from app.core.config import configs
-from app.core.container import Container
-from app.util.class_object import singleton
+from app.analytics.api.v1.routes import routers as v1_routers
+from app.analytics.core.container import AnalyticsContainer
+
+from app.settings.config import configs
+from app.shared.util.class_object import singleton
 
 
 @singleton
@@ -18,8 +19,8 @@ class AppCreator:
         )
 
         # set db and container
-        self.container = Container()
-        self.db = self.container.db()
+        self.analytics_container = AnalyticsContainer()
+        self.analytics_db = self.analytics_container.db()
         # self.db.create_database()
 
         # set cors
@@ -42,5 +43,5 @@ class AppCreator:
 
 app_creator = AppCreator()
 app = app_creator.app
-db = app_creator.db
-container = app_creator.container
+analytics_db = app_creator.analytics_db
+analytics_container = app_creator.analytics_container

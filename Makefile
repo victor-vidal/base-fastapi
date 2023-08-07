@@ -2,10 +2,10 @@ docker_cmd:
     docker-compose -f development.yml $(cmd)
 
 dinfra:
-    docker-compose -f development.yml up --build -d db minio redis
+    docker-compose -f development.yml up --build -d db keycloak
 
 infra:
-    docker-compose -f development.yml up --build db minio redis
+    docker-compose -f development.yml up --build db keycloak
 
 dall:
     docker-compose -f development.yml up --build -d

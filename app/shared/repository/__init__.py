@@ -1,0 +1,1 @@
+from app.shared.repository.base_repository import *

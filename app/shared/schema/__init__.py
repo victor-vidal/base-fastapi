@@ -1,0 +1,1 @@
+from app.shared.schema.base_schema import *

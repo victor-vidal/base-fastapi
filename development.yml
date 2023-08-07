@@ -9,13 +9,13 @@ services:
     build:
       context: .
       dockerfile: ./docker/dev/Dockerfile
-    image: superset-proxy-api
+    image: base-fastapi
     restart: always
     env_file:
       - ./.envs/.env-dev
-    container_name: superset-proxy-api
+    container_name: base-fastapi
     command: >
-      bash -c 'alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --timeout-keep-alive 10'
+      bash -c './scripts/migrate_all.sh && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --timeout-keep-alive 10'
     # uncomment to simulate production
     # command: >
     #   bash -c 'gunicorn app.main:app -k uvicorn.workers.UvicornWorker -c deploy_conf.py'
@@ -24,22 +24,32 @@ services:
     volumes:
       - ./app:/usr/src/app/app
     networks:
-      - superset-proxy-api
+      - base-fastapi-network
     extra_hosts:
       - "host.docker.internal:host-gateway" 
   db:
-    image: postgres:14.2
+    image: postgres:15
     command: ["postgres", "-c", "max_connections=1000"]
+    env_file:
+      - ./.envs/.env-dev
     ports:
       - "5432:5432"
     volumes:
       - "./dockervolume/db/pgdata:/var/lib/postgresql/data"
+      - ./scripts/create_databases.sh:/docker-entrypoint-initdb.d/create_databases.sh
     networks:
-      - superset-proxy-api
+      - base-fastapi-network
     environment:
       POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "fastapi-auth-db"
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak:22.0.1
+  #   command: ["start-dev"]
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     KEYCLOAK_ADMIN: admin
+  #     KEYCLOAK_ADMIN_PASSWORD: admin
 
 networks:
-  superset-proxy-api:
-    name: superset-proxy-api
+  base-fastapi-network:
+    name: base-fastapi-network

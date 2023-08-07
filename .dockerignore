@@ -7,3 +7,4 @@
 !docker/
 !migrations/
 !alembic.ini
+!scripts/

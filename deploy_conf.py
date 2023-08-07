@@ -9,7 +9,7 @@ else:
     # workers = multiprocessing.cpu_count()
     workers = 1
 
-print(f"Fast API Auth Server - Num Workers: {workers}")
+print(f"Base Fast API Server - Num Workers: {workers}")
 
 bind = "0.0.0.0:8000"
 keepalive = 120
