@@ -17,14 +17,14 @@ class AppCreator:
             openapi_url=f"{configs.API}/openapi.json",
             version="0.0.1",
         )
-        # self.idp = FastAPIKeycloak(
-        #     server_url="https://auth.some-domain.com/auth",
-        #     client_id="some-client",
-        #     client_secret="some-client-secret",
-        #     admin_client_secret="admin-cli-secret",
-        #     realm="some-realm-name",
-        #     callback_uri="http://localhost:8081/callback"
-        # )
+        self.idp = FastAPIKeycloak(
+            server_url="http://127.0.0.1:8080/auth", # esse path tá errado
+            client_id="internal",
+            client_secret="KN5rAlD8IF74nrm5DfQP5nbfiav7yRbn",
+            admin_client_secret="HgW92WSYUIwWGB2z2dR2ha46zmyJHwKB",
+            realm="dev",
+            callback_uri="http://127.0.0.1:8081/callback" # não sei qual seria esse
+        )
 
         # set db and container
         self.analytics_container = AnalyticsContainer()
