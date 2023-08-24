@@ -19,34 +19,55 @@ services:
     # uncomment to simulate production
     # command: >
     #   bash -c 'gunicorn app.main:app -k uvicorn.workers.UvicornWorker -c deploy_conf.py'
+    ports:
+      - "8000:8000"
     volumes:
       - ./app:/usr/src/app/app
-    network_mode: "host"
+    networks:
+      - base-fastapi-network
     extra_hosts:
-      - "host.docker.internal:host-gateway" 
+      - "host.docker.internal:host-gateway"
   db:
     image: postgres:15
     command: ["postgres", "-c", "max_connections=1000"]
     env_file:
       - ./.envs/.env-dev
-    network_mode: "host"
+    ports:
+      - "5432:5432"
+    networks:
+      - base-fastapi-network
     volumes:
       - "./dockervolume/db/pgdata:/var/lib/postgresql/data"
       - ./scripts/create_databases.sh:/docker-entrypoint-initdb.d/create_databases.sh
     environment:
       POSTGRES_PASSWORD: "postgres"
-  keycloak:
-    image: quay.io/keycloak/keycloak:22.0.1
-    command: ["start-dev"]
-    restart: always
-    network_mode: "host"
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://localhost:5432/keycloakdb
-      KC_DB_USERNAME: postgres
-      KC_DB_PASSWORD: postgres
-      KC_HOSTNAME: localhost
-      KC_HEALTH_ENABLED: "true"
+  # keycloak:
+  #   image: quay.io/keycloak/keycloak:22.0.1
+  #   command: ["start-dev"]
+  #   restart: always
+  #   networks:
+  # - base-fastapi-network
+  #   environment:
+  #     KEYCLOAK_ADMIN: admin
+  #     KEYCLOAK_ADMIN_PASSWORD: admin
+  #     KC_DB: postgres
+  #     KC_DB_URL: jdbc:postgresql://localhost:5432/keycloakdb
+  #     KC_DB_USERNAME: postgres
+  #     KC_DB_PASSWORD: postgres
+  #     KC_HOSTNAME: localhost
+  #     KC_HEALTH_ENABLED: "true"
+  minio:
+    image: minio/minio
+    hostname: "minio"
+    volumes:
+      - ~/.minio:/minio_files
+    command: 'minio server /minio_files --console-address ":9001"'
+    ports:
+      - "9001:9001"
+    networks:
+      - base-fastapi-network
 
+networks:
+  base-fastapi-network:
+    external: false
+    name: base-fastapi-network

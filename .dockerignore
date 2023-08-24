@@ -8,3 +8,4 @@
 !migrations/
 !alembic.ini
 !scripts/
+!notebooks

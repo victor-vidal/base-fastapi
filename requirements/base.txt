@@ -66,3 +66,7 @@ watchfiles==0.17.0
 watchgod==0.8.2
 websockets==10.3
 zipp==3.8.0
+pandas
+joblib
+scikit-learn
+boto3

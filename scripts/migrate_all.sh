@@ -1,3 +1,3 @@
 echo "MIGRATING ALL APPS..."
 
-alembic -c ./app/analytics/alembic.ini upgrade head
+alembic -c ./app/fraud/alembic.ini upgrade head

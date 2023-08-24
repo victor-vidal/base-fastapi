@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Any, Dict
 
 from pydantic import BaseModel
 
@@ -34,3 +34,8 @@ class FindDateRange(BaseModel):
 
 class Blank(BaseModel):
     pass
+
+
+JSONObject = Dict[str, Any]
+JSONArray = List[Any]
+FlatJSONObject = Dict[str, Union[str, float, int, bool]]

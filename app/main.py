@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from app.analytics.api.v1.routes import routers as v1_routers
-from app.analytics.core.container import AnalyticsContainer
+from app.fraud.api.v1.routes import routers as v1_routers
+from app.fraud.core.container import FraudContainer
 
 from app.settings.config import configs
 from app.shared.util.class_object import singleton
 from app.shared.idp import FastAPIKeycloak
+
 
 @singleton
 class AppCreator:
@@ -14,21 +15,23 @@ class AppCreator:
         # set app default
         self.app = FastAPI(
             title=configs.PROJECT_NAME,
-            openapi_url=f"{configs.API}/openapi.json",
+            docs_url="/api/docs/swagger",
+            redoc_url="/api/docs/redoc",
+            openapi_url="/api/docs",
             version="0.0.1",
         )
-        self.idp = FastAPIKeycloak(
-            server_url="http://127.0.0.1:8080/auth", # esse path tá errado
-            client_id="internal",
-            client_secret="KN5rAlD8IF74nrm5DfQP5nbfiav7yRbn",
-            admin_client_secret="HgW92WSYUIwWGB2z2dR2ha46zmyJHwKB",
-            realm="dev",
-            callback_uri="http://127.0.0.1:8081/callback" # não sei qual seria esse
-        )
+        # self.idp = FastAPIKeycloak(
+        #     server_url="http://127.0.0.1:8080/auth", # esse path tá errado
+        #     client_id="internal",
+        #     client_secret="KN5rAlD8IF74nrm5DfQP5nbfiav7yRbn",
+        #     admin_client_secret="HgW92WSYUIwWGB2z2dR2ha46zmyJHwKB",
+        #     realm="dev",
+        #     callback_uri="http://127.0.0.1:8081/callback" # não sei qual seria esse
+        # )
 
         # set db and container
-        self.analytics_container = AnalyticsContainer()
-        self.analytics_db = self.analytics_container.db()
+        self.fraud_container = FraudContainer()
+        self.fraud_db = self.fraud_container.db()
         # self.db.create_database()
 
         # set cors
@@ -51,5 +54,5 @@ class AppCreator:
 
 app_creator = AppCreator()
 app = app_creator.app
-analytics_db = app_creator.analytics_db
-analytics_container = app_creator.analytics_container
+fraud_db = app_creator.fraud_db
+fraud_container = app_creator.fraud_container
